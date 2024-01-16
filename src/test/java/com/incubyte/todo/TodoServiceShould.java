@@ -1,6 +1,7 @@
 package com.incubyte.todo;
 
 import com.incubyte.todo.exceptions.TodoNotFoundException;
+import io.micronaut.http.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -30,9 +31,9 @@ public class TodoServiceShould {
     void create_todo_task() {
         TodoDto todoTask = new TodoDto("new activity");
         Todo currentTodo = new Todo(1, todoTask.getTask());
-        when(todoRepository.save(todoTask)).thenReturn(currentTodo);
+        when(todoRepository.save(Mockito.any())).thenReturn(currentTodo);
         Todo todo = todoService.createTodoTask(todoTask);
-        verify(todoRepository).save(todoTask);
+        verify(todoRepository).save(Mockito.any());
         assertThat(todo).isEqualTo(currentTodo);
     }
 
@@ -48,39 +49,35 @@ public class TodoServiceShould {
     @Test
     void delete_given_task() {
         Integer id = todo1.getId();
-        String todoTask = "deleted todo";
-        when(todoRepository.getTodoById(id)).thenReturn(Optional.ofNullable(todo1));
-        Todo expectedTodo = new Todo(id, todoTask);
-        when(todoRepository.delete(id)).thenReturn(expectedTodo);
-        Todo deletedTodo = todoService.deleteTask(id);
-        verify(todoRepository).getTodoById(id);
-        verify(todoRepository).delete(id);
-        assertThat(deletedTodo).isEqualTo(expectedTodo);
+        when(todoRepository.findById(id)).thenReturn(Optional.ofNullable(todo1));
+        todoService.deleteTask(id);
+        verify(todoRepository).findById(id);
+        verify(todoRepository).deleteById(id);
     }
 
     @Test
     void update_given_task() {
         Integer id = todo1.getId();
         String updated = "updated todo";
-        when(todoRepository.getTodoById(id)).thenReturn(Optional.ofNullable(todo1));
+        when(todoRepository.findById(id)).thenReturn(Optional.ofNullable(todo1));
         Todo expectedTodo = new Todo(id, updated);
-        when(todoRepository.update(id,updated)).thenReturn(expectedTodo);
+        when(todoRepository.update(Mockito.any())).thenReturn(expectedTodo);
         Todo updatedTodo = todoService.updateTask(id,updated);
-        verify(todoRepository).getTodoById(id);
-        verify(todoRepository).update(id,updated);
+        verify(todoRepository).findById(id);
+        verify(todoRepository).update(Mockito.any());
         assertThat(updatedTodo).isEqualTo(expectedTodo);
     }
 
     @Test
     void throw_exception_if_todo_not_exist_on_delete(){
-        when(todoRepository.getTodoById(11)).thenReturn(Optional.ofNullable(null));
+        when(todoRepository.findById(11)).thenReturn(Optional.ofNullable(null));
         assertThatThrownBy(() -> todoService.deleteTask(11))
                 .isInstanceOf(TodoNotFoundException.class)
                 .hasMessage("todo not found with id" + 11);
     }
     @Test
     void throw_exception_if_todo_not_exist_on_update(){
-        when(todoRepository.getTodoById(11)).thenReturn(Optional.ofNullable(null));
+        when(todoRepository.findById(11)).thenReturn(Optional.ofNullable(null));
         assertThatThrownBy(() -> todoService.deleteTask(11))
                 .isInstanceOf(TodoNotFoundException.class)
                 .hasMessage("todo not found with id" + 11);

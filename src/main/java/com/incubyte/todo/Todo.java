@@ -1,10 +1,15 @@
 package com.incubyte.todo;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "todo")
 public class Todo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-
+    @Column(name = "task")
     private String task;
 
     public Todo() {}

@@ -1,5 +1,7 @@
 package com.incubyte.todo;
 
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.*;
 
 @Controller("/todo")
@@ -11,22 +13,23 @@ public class TodoController {
     }
 
     @Post("/create")
-    public Todo createTodoTask(@Body TodoDto todoTask) {
-        return todoService.createTodoTask(todoTask);
+    public HttpResponse<Todo> createTodoTask(@Body TodoDto todoTask) {
+        return HttpResponse.created(todoService.createTodoTask(todoTask));
     }
 
     @Get("/find_all")
-    public TodoWrapper findAllTask() {
-        return todoService.findAllTask();
+    public HttpResponse<TodoWrapper> findAllTask() {
+        return HttpResponse.ok(todoService.findAllTask());
     }
 
     @Delete(value="/delete/{id}")
-    public Todo deleteTask(@PathVariable int id) {
-        return todoService.deleteTask(id);
+    public HttpResponse<Todo> deleteTask(@PathVariable int id) {
+        todoService.deleteTask(id);
+        return HttpResponse.ok();
     }
 
     @Put(value="/update/{id}")
-    public Todo updateTask(@PathVariable int id,@Body TodoDto updatedTodo) {
-        return  todoService.updateTask(id,updatedTodo.getTask());
+    public HttpResponse<Todo> updateTask(@PathVariable int id,@Body TodoDto updatedTodo) {
+        return  HttpResponse.ok(todoService.updateTask(id,updatedTodo.getTask()));
     }
 }

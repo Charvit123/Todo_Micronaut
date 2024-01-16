@@ -1,5 +1,6 @@
 package com.incubyte.todo;
 
+import io.micronaut.http.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,25 +22,25 @@ public class TodoControllerShould {
     @Test
     void create_task(){
         TodoDto todoTask = new TodoDto("new activity");
-        Todo todo = todoController.createTodoTask(todoTask);
+        HttpResponse<Todo> todo = todoController.createTodoTask(todoTask);
         verify(todoService).createTodoTask(todoTask);
     }
 
     @Test
     void get_all_task(){
-        TodoWrapper todo = todoController.findAllTask();
+        HttpResponse<TodoWrapper> todo = todoController.findAllTask();
         verify(todoService).findAllTask();
     }
 
     @Test
     void delete_given_task(){
-        Todo todo = todoController.deleteTask(1);
+        todoController.deleteTask(1);
         verify(todoService).deleteTask(1);
     }
     @Test
     void update_given_task(){
         TodoDto updatedTodo = new TodoDto("new activity");
-        Todo todo = todoController.updateTask(1,updatedTodo);
+        HttpResponse<Todo> todo = todoController.updateTask(1,updatedTodo);
         verify(todoService).updateTask(1,updatedTodo.getTask());
     }
 }
