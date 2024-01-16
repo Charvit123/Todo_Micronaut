@@ -4,6 +4,7 @@ import jakarta.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Singleton
 public class TodoRepository {
@@ -23,14 +24,24 @@ public class TodoRepository {
         return todoList;
     }
 
+    public Optional<Todo> getTodoById(Integer id) {
+        return todoList.stream().filter((todo) -> todo.getId() == id).findFirst();
+    }
+
     public Todo delete(int id) {
-        Todo deletedTode = todoList.stream().filter(todo -> todo.getId() == id).findFirst().orElseThrow(() -> new IllegalArgumentException("Id not Found"));
+        Todo deletedTode = todoList.stream()
+                .filter(todo -> todo.getId() == id)
+                .findFirst()
+                .orElseThrow(null);
         todoList.remove(deletedTode);
-        System.out.println(todoList);
         return deletedTode;
     }
 
     public Todo update(int id, String updatedTask) {
-        return todoList.stream().filter(todo -> todo.getId() == id).peek((todo) -> todo.setTask(updatedTask)).findFirst().orElseThrow(() -> new IllegalArgumentException("Id not Found"));
+        return todoList.stream()
+                .filter(todo -> todo.getId() == id)
+                .peek(todo -> todo.setTask(updatedTask))
+                .findFirst()
+                .orElseThrow(null);
     }
 }

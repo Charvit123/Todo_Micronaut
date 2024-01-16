@@ -29,15 +29,15 @@ public class TodoControllerTest {
         TodoWrapper todoResponse = httpClient.toBlocking().retrieve(GET("/find_all"),TodoWrapper.class);
         assertThat(todoResponse).isNotNull();
         assertThat(todoResponse).isInstanceOf(TodoWrapper.class);
-        assertThat(todoResponse.getTodosLength()).isGreaterThanOrEqualTo(1);
+        assertThat(todoResponse.getTodos().size()).isGreaterThanOrEqualTo(1);
     }
 
     @Test
     void update_todo(){
         TodoDto updatedTodo = new TodoDto("updated");
-        Todo todoResponse = httpClient.toBlocking().retrieve(PUT("/update/101",updatedTodo),Todo.class);
+        Todo todoResponse = httpClient.toBlocking().retrieve(PUT("/update/100",updatedTodo),Todo.class);
         assertThat(todoResponse).isNotNull();
-        assertThat(todoResponse.getId()).isEqualTo(101);
+        assertThat(todoResponse.getId()).isEqualTo(100);
         assertThat(todoResponse.getTask()).isEqualTo(updatedTodo.getTask());
     }
     @Test

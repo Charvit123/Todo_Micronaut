@@ -1,5 +1,6 @@
 package com.incubyte.todo;
 
+import com.incubyte.todo.exceptions.TodoNotFoundException;
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -19,10 +20,12 @@ public class TodoService {
     }
 
     public Todo deleteTask(int id) {
+        todoRepository.getTodoById(id).orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
         return todoRepository.delete(id);
     }
 
     public Todo updateTask(int id, String updatedTask) {
+        todoRepository.getTodoById(id).orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
         return todoRepository.update(id, updatedTask);
     }
 }

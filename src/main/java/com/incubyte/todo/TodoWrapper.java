@@ -14,7 +14,4 @@ public class TodoWrapper {
     public List<Todo> getTodos() {
         return todos;
     }
-    public int getTodosLength() {
-        return todos.size();
-    }
 }
