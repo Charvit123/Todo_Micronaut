@@ -1,0 +1,12 @@
+datasources:
+  default:
+    driver-class-name: ${DATASOURCES_DEFAULT_DRIVER:org.mariadb.jdbc.Driver}
+    db-type: mariadb
+    dialect: MYSQL
+    jdbc-url: ${DATASOURCES_DEFAULT_URL:`jdbc:mariadb://localhost:3306/todo_test`}
+    username: ${DATASOURCES_DEFAULT_USER:root}
+    password: ${DATASOURCES_DEFAULT_PASSWORD:Password123!}
+liquibase:
+  datasources:
+    default:
+      change-log: db/liquibase-changelog.yml

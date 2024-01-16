@@ -23,7 +23,7 @@ public class TodoController {
     }
 
     @Delete(value="/delete/{id}")
-    public HttpResponse<Todo> deleteTask(@PathVariable int id) {
+    public HttpResponse<Void> deleteTask(@PathVariable int id) {
         todoService.deleteTask(id);
         return HttpResponse.ok();
     }

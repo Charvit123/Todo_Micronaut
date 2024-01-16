@@ -59,9 +59,8 @@ public class TodoControllerTest {
     }
     @Test
     void delete_todo(){
-        HttpResponse<Todo> todoResponse = httpClient.toBlocking().exchange(DELETE("/delete/"+todoCreated.getId()),Todo.class);
+        HttpResponse<Void> todoResponse = httpClient.toBlocking().exchange(DELETE("/delete/"+todoCreated.getId()), Void.class);
         assertThat(todoResponse.getStatus().getCode()).isEqualTo(200);
-        Todo todo = todoResponse.body();
-        assertThat(todo).isNull();
+        assertThat(todoResponse.body()).isNull();
     }
 }

@@ -34,7 +34,7 @@ public class TodoControllerShould {
 
     @Test
     void delete_given_task(){
-        todoController.deleteTask(1);
+        HttpResponse<Void> voidHttpResponse = todoController.deleteTask(1);
         verify(todoService).deleteTask(1);
     }
     @Test
