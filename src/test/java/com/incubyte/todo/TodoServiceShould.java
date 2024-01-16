@@ -74,12 +74,17 @@ public class TodoServiceShould {
     @Test
     void throw_exception_if_todo_not_exist_on_delete(){
         when(todoRepository.getTodoById(11)).thenReturn(Optional.ofNullable(null));
-        assertThatThrownBy(() -> todoService.deleteTask(11)).isInstanceOf(TodoNotFoundException.class);
+        assertThatThrownBy(() -> todoService.deleteTask(11))
+                .isInstanceOf(TodoNotFoundException.class)
+                .hasMessage("todo not found with id" + 11);
     }
     @Test
     void throw_exception_if_todo_not_exist_on_update(){
         when(todoRepository.getTodoById(11)).thenReturn(Optional.ofNullable(null));
-        assertThatThrownBy(() -> todoService.deleteTask(11)).isInstanceOf(TodoNotFoundException.class);
+        assertThatThrownBy(() -> todoService.deleteTask(11))
+                .isInstanceOf(TodoNotFoundException.class)
+                .hasMessage("todo not found with id" + 11);
+        ;
     }
 
 }
