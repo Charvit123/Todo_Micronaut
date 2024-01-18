@@ -1,8 +1,12 @@
 package com.incubyte.todo;
 
 import com.incubyte.todo.exceptions.TodoNotFoundException;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.data.model.Pageable;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.Date;
 
 @Singleton
 public class TodoService {
@@ -12,10 +16,11 @@ public class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    public Todo createTodoTask(TodoDto todoTask)
-    {
+    public Todo createTodoTask(@NotNull TodoDto todoTask) {
         Todo todo = new Todo();
-        todo.setTask(todoTask.getTask());
+        todo.setTask(todoTask.task());
+        todo.setDate(new Date());
+        todo.setStatus(todoTask.status());
         return todoRepository.save(todo);
     }
 
@@ -23,14 +28,25 @@ public class TodoService {
         return new TodoWrapper(todoRepository.findAll());
     }
 
-    public void deleteTask(int id) {
-        todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
-        todoRepository.deleteById(id);
+    public Todo deleteTask(int id) {
+        Todo todo = getTodoById(id);
+        todo.setStatus(TodoStatus.ARCHIVE);
+        return todoRepository.update(todo);
     }
 
-    public Todo updateTask(int id, String updatedTask) {
-        Todo todo = todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
-        todo.setTask(updatedTask);
+    public Todo updateTask(int id,@NotNull TodoDto updatedTask) {
+        Todo todo = getTodoById(id);
+        todo.setTask(updatedTask.task());
+        todo.setStatus(updatedTask.status());
         return todoRepository.update(todo);
+    }
+
+    private Todo getTodoById(int id) {
+        return todoRepository.findById(id).orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
+    }
+
+    public TodoWrapper getTaskByPage(int pageNum, int pageSize) {
+        List<Todo> todoPage = todoRepository.findAll(Pageable.from(pageNum, pageSize));
+        return new TodoWrapper(todoPage);
     }
 }

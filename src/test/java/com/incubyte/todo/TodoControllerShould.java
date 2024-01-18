@@ -4,8 +4,6 @@ import io.micronaut.http.HttpResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -21,7 +19,7 @@ public class TodoControllerShould {
 
     @Test
     void create_task(){
-        TodoDto todoTask = new TodoDto("new activity");
+        TodoDto todoTask = new TodoDto("new activity", TodoStatus.TO_DO);
         HttpResponse<Todo> todo = todoController.createTodoTask(todoTask);
         verify(todoService).createTodoTask(todoTask);
     }
@@ -33,14 +31,22 @@ public class TodoControllerShould {
     }
 
     @Test
+    void get_task_page(){
+        int pageNum=0;
+        int pageSize=5;
+        HttpResponse<TodoWrapper> todo = todoController.getTaskByPage(pageNum,pageSize);
+        verify(todoService).getTaskByPage(pageNum,pageSize);
+    }
+
+    @Test
     void delete_given_task(){
-        HttpResponse<Void> voidHttpResponse = todoController.deleteTask(1);
+        HttpResponse<Todo> HttpResponse = todoController.deleteTask(1);
         verify(todoService).deleteTask(1);
     }
     @Test
     void update_given_task(){
-        TodoDto updatedTodo = new TodoDto("new activity");
+        TodoDto updatedTodo = new TodoDto("new activity", TodoStatus.IN_PROGRESS);
         HttpResponse<Todo> todo = todoController.updateTask(1,updatedTodo);
-        verify(todoService).updateTask(1,updatedTodo.getTask());
+        verify(todoService).updateTask(1,updatedTodo);
     }
 }

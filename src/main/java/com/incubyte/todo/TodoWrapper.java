@@ -1,13 +1,15 @@
 package com.incubyte.todo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class TodoWrapper {
     private List<Todo> todos;
 
-    public TodoWrapper() {}
-
-    public TodoWrapper(List<Todo> todos) {
+    @JsonCreator
+    public TodoWrapper(@JsonProperty("todos") List<Todo> todos) {
         this.todos = todos;
     }
 

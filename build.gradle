@@ -21,6 +21,8 @@ dependencies {
     testImplementation('org.mockito:mockito-core')
     implementation("io.micronaut:micronaut-jackson-databind")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+    implementation("io.micronaut.validation:micronaut-validation")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     implementation("io.micronaut.liquibase:micronaut-liquibase")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
