@@ -6,7 +6,6 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
-import java.util.Date;
 
 @Singleton
 public class TodoService {
@@ -19,7 +18,6 @@ public class TodoService {
     public Todo createTodoTask(@NotNull TodoDto todoTask) {
         Todo todo = new Todo();
         todo.setTask(todoTask.task());
-        todo.setDate(new Date());
         todo.setStatus(todoTask.status());
         return todoRepository.save(todo);
     }

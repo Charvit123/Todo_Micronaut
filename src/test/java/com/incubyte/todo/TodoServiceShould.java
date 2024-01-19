@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +28,12 @@ public class TodoServiceShould {
 
     @BeforeEach
     void setup() {
-        todo1 = new Todo(1, "todo1", new Date(), TodoStatus.TO_DO);
-        todo2 = new Todo(2, "todo2", new Date(), TodoStatus.IN_PROGRESS);
-        todo3 = new Todo(1, "todo1", new Date(), TodoStatus.TO_DO);
-        todo4 = new Todo(1, "todo1", new Date(), TodoStatus.TO_DO);
-        todo5 = new Todo(1, "todo1", new Date(), TodoStatus.TO_DO);
-        todo6 = new Todo(1, "todo1", new Date(), TodoStatus.TO_DO);
+        todo1 = new Todo(1, "todo1", TodoStatus.TO_DO);
+        todo2 = new Todo(2, "todo2", TodoStatus.IN_PROGRESS);
+        todo3 = new Todo(1, "todo1", TodoStatus.TO_DO);
+        todo4 = new Todo(1, "todo1", TodoStatus.TO_DO);
+        todo5 = new Todo(1, "todo1", TodoStatus.TO_DO);
+        todo6 = new Todo(1, "todo1", TodoStatus.TO_DO);
         todoRepository = Mockito.mock(TodoRepository.class);
         todoService = new TodoService(todoRepository);
     }
@@ -42,7 +41,7 @@ public class TodoServiceShould {
     @Test
     void create_todo_task() {
         TodoDto todoTask = new TodoDto("new activity", TodoStatus.TO_DO);
-        Todo currentTodo = new Todo(1, todoTask.task(), new Date() , todoTask.status());
+        Todo currentTodo = new Todo(1, todoTask.task() , todoTask.status());
         when(todoRepository.save(Mockito.any())).thenReturn(currentTodo);
         Todo todo = todoService.createTodoTask(todoTask);
         verify(todoRepository).save(Mockito.any());
@@ -88,7 +87,7 @@ public class TodoServiceShould {
         int id = todo1.getId();
         TodoStatus resoposeStatus = TodoStatus.ARCHIVE;
         when(todoRepository.findById(id)).thenReturn(Optional.ofNullable(todo1));
-        Todo expectedTodo = new Todo(id, todo1.getTask(), new Date() , resoposeStatus);
+        Todo expectedTodo = new Todo(id, todo1.getTask() , resoposeStatus);
         when(todoRepository.update(Mockito.any())).thenReturn(expectedTodo);
         Todo todo=todoService.deleteTask(id);
         verify(todoRepository).findById(id);
@@ -102,7 +101,7 @@ public class TodoServiceShould {
         String updatedTask = "updated todo";
         TodoStatus updatedStatus = TodoStatus.DONE;
         when(todoRepository.findById(id)).thenReturn(Optional.ofNullable(todo1));
-        Todo expectedTodo = new Todo(id, updatedTask, new Date() , updatedStatus);
+        Todo expectedTodo = new Todo(id, updatedTask , updatedStatus);
         when(todoRepository.update(Mockito.any())).thenReturn(expectedTodo);
         Todo updatedTodo = todoService.updateTask(id,new TodoDto(updatedTask,updatedStatus));
         verify(todoRepository).findById(id);

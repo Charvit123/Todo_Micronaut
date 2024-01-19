@@ -2,18 +2,25 @@ package com.incubyte.todo;
 
 import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Calendar;
 
 @Singleton
 public class ArchiveDeletionJob {
     private final TodoRepository todoRepository;
+    Logger logger = LoggerFactory.getLogger(ArchiveDeletionJob.class);
 
-    // Constructor injection or @Autowired
     public ArchiveDeletionJob(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void delete() {
-        todoRepository.deleteByStatusArchive();
+        logger.info("Running Job");
+        Calendar cutoffTime = Calendar.getInstance();
+        cutoffTime.add(Calendar.MINUTE, -5);
+        todoRepository.deleteByStatusArchive(cutoffTime);
     }
 }
